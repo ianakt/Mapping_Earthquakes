@@ -4,8 +4,20 @@ console.log("working");
 // // Create the map object with a center and zoom level.
 // let map = L.map('mapid').setView([40.7, -94.5], 4);
 
+
 // Create the map object with center and zoom level.
-let map = L.map('mapid').setView([34.0522, -118.2437], 4);
+let map = L.map('mapid').setView([30, 30], 2);
+
+// Accessing the airport GeoJSON URL
+let airportData = "Simple_Map\static\js\majorAirports.json";
+
+// Grabbing our GeoJSON data.
+d3.json(airportData).then(function(data) {
+   console.log(data);
+ // Creating a GeoJSON layer with the retrieved data.
+ L.geoJSON(data).addTo(map);
+});
+
 
 // We create the tile layer that will be the background of our map.
 let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -18,6 +30,61 @@ let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tile
 });
 // Then we add our 'graymap' tile layer to the map.
 streets.addTo(map);
+
+
+// Add GeoJSON data.
+let sanFranAirport =
+{"type":"FeatureCollection","features":[{
+    "type":"Feature",
+    "properties":{
+        "id":"3469",
+        "name":"San Francisco International Airport",
+        "city":"San Francisco",
+        "country":"United States",
+        "faa":"SFO",
+        "icao":"KSFO",
+        "alt":"13",
+        "tz-offset":"-8",
+        "dst":"A",
+        "tz":"America/Los_Angeles"},
+        "geometry":{
+            "type":"Point",
+            "coordinates":[-122.375,37.61899948120117]}}
+]};
+
+
+// // Grabbing our GeoJSON data.
+// L.geoJSON(sanFranAirport, {
+//   // We turn each feature into a marker on the map.
+//   pointToLayer: function(feature, latlng) {
+//     console.log(feature);
+//     return L.marker(latlng).bindPopup("<h2>" + feature.properties.city + "</h2>");
+    
+//   }
+
+// }).addTo(map);
+
+L.geoJSON(sanFranAirport, {
+
+  pointToLayer: function(feature, latlng) {
+    console.log(feature);
+    return L.marker(latlng).bindPopup("<h2>" + feature.properties.city + "</h2>");
+    
+  },
+  // We turn each feature into a marker on the map.
+  onEachFeature: function(feature, layer) {
+    console.log(layer);
+    layer.bindPopup("<h2>" + feature.properties.name + `\n airport code:  ${feature.properties.faa}` + "</h2>");
+    
+  }
+
+}).addTo(map);
+
+
+
+
+
+
 
 //  Add a marker to the map for Los Angeles, California.
 //let marker = L.marker([34.0522, -118.2437]).addTo(map);
@@ -145,18 +212,13 @@ L.polyline(line, {
     onEachFeature: function(feature, layer) {
       layer.bindPopup();
       
+      
      }
 });
 
- // Accessing the airport GeoJSON URL
- let airportData = "https://raw.githubusercontent.com/<GitHub_name>/Mapping_Earthquakes/main/majorAirports.json";
 
- // Grabbing our GeoJSON data.
-d3.json(airportData).then(function(data) {
-    console.log(data);
-  // Creating a GeoJSON layer with the retrieved data.
-  L.geoJSON(data).addTo(map);
-});
+
+ 
 
 // "geometry": {
 //   "type": "MultiPolygon",
@@ -165,3 +227,49 @@ d3.json(airportData).then(function(data) {
 //    [ [ -122.378, 37.826 ], [ -122.377, 37.830 ], [ -122.369, 37.832 ] ]
 // ]
 
+// 13.5.1
+
+
+
+
+
+
+
+
+
+
+L.geoJSON(data, {
+  onEachFeature: function(feature, layer) {
+    layer.bindPopup();
+   }
+});
+
+// Grabbing our GeoJSON data.
+d3.json(airportData).then(function(data) {
+  console.log(data);
+// Creating a GeoJSON layer with the retrieved data.
+L.geoJSON(data).addTo(map);
+});
+
+// We create the dark view tile layer that will be an option for our map.
+let dark = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    accessToken: API_KEY
+});
+
+// Accessing the Toronto airline routes GeoJSON URL.
+let torontoData = "https://raw.githubusercontent.com/<GitHub_name>/Mapping_Earthquakes/main/torontoRoutes.json";
+
+// Grabbing our GeoJSON data.
+d3.json(torontoData).then(function(data) {
+  console.log(data);
+// Creating a GeoJSON layer with the retrieved data.
+L.geoJSON(data).addTo(map);
+});
+
+// Create a style for the lines.
+let myStyle = {
+    color: "#ffffa1",
+    weight: 2
+}
