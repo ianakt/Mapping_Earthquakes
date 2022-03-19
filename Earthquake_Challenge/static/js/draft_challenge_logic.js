@@ -169,6 +169,8 @@ var latlngs = [
 
 var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
 
+
+// This didn't work but it was a good effort
 // let trite = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json"
 
 // function Wonda(trite) {
